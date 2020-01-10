@@ -1,0 +1,100 @@
+diff -uPr xmlsec1-1.2.20.old/xmlsec1-gcrypt.pc xmlsec1-1.2.20.new/xmlsec1-gcrypt.pc
+--- xmlsec1-1.2.20.old/xmlsec1-gcrypt.pc	2014-05-27 14:29:46.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec1-gcrypt.pc	2014-05-28 10:17:42.310650405 -0400
+@@ -7,5 +7,5 @@
+ Version: 1.2.20
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= 2.7.4 libxslt >= 1.0.20
+-Cflags: -DXMLSEC_CRYPTO=\"gcrypt\"  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1     -DXMLSEC_CRYPTO_GCRYPT=1
++Cflags: -DXMLSEC_CRYPTO=\\\"gcrypt\\\"  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1     -DXMLSEC_CRYPTO_GCRYPT=1
+ Libs: -L${exec_prefix}/lib -lxmlsec1-gcrypt -lxmlsec1 -lltdl   -L/lib/i386-linux-gnu -lgcrypt
+diff -uPr xmlsec1-1.2.20.old/xmlsec1-gnutls.pc xmlsec1-1.2.20.new/xmlsec1-gnutls.pc
+--- xmlsec1-1.2.20.old/xmlsec1-gnutls.pc	2014-05-27 14:29:46.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec1-gnutls.pc	2014-05-28 10:17:42.310650405 -0400
+@@ -7,5 +7,5 @@
+ Version: 1.2.20
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= 2.7.4 libxslt >= 1.0.20
+-Cflags: -DXMLSEC_CRYPTO=\"gnutls\"  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1   -I/usr/include/p11-kit-1   -DXMLSEC_CRYPTO_GNUTLS=1
++Cflags: -DXMLSEC_CRYPTO=\\\"gnutls\\\"  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1   -I/usr/include/p11-kit-1   -DXMLSEC_CRYPTO_GNUTLS=1
+ Libs: -L${exec_prefix}/lib -lxmlsec1-gnutls -lxmlsec1-gcrypt -lxmlsec1 -lltdl  -lgnutls  
+diff -uPr xmlsec1-1.2.20.old/xmlsec1-nss.pc xmlsec1-1.2.20.new/xmlsec1-nss.pc
+--- xmlsec1-1.2.20.old/xmlsec1-nss.pc	2014-05-27 14:29:46.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec1-nss.pc	2014-05-28 10:17:42.311650413 -0400
+@@ -7,5 +7,5 @@
+ Version: 1.2.20
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= 2.7.4 libxslt >= 1.0.20 xulrunner-nspr >= 1.4 xulrunner-nss >= 1.4
+-Cflags: -DXMLSEC_CRYPTO=\"nss\" -DXMLSEC_CRYPTO_NSS=1  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1  
++Cflags: -DXMLSEC_CRYPTO=\\\"nss\\\" -DXMLSEC_CRYPTO_NSS=1  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1  
+ Libs: -L${libdir} -lxmlsec1-nss -lxmlsec1 -lltdl 
+diff -uPr xmlsec1-1.2.20.old/xmlsec1-openssl.pc xmlsec1-1.2.20.new/xmlsec1-openssl.pc
+--- xmlsec1-1.2.20.old/xmlsec1-openssl.pc	2014-05-27 14:29:46.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec1-openssl.pc	2014-05-28 10:17:42.311650413 -0400
+@@ -7,5 +7,5 @@
+ Version: 1.2.20
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= 2.7.4 libxslt >= 1.0.20 
+-Cflags: -DXMLSEC_CRYPTO=\"openssl\"  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1     -DXMLSEC_OPENSSL_100=1 -DXMLSEC_CRYPTO_OPENSSL=1
++Cflags: -DXMLSEC_CRYPTO=\\\"openssl\\\"  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1     -DXMLSEC_OPENSSL_100=1 -DXMLSEC_CRYPTO_OPENSSL=1
+ Libs: -L${exec_prefix}/lib -lxmlsec1-openssl -lxmlsec1 -lltdl  -lssl -lcrypto  
+diff -uPr xmlsec1-1.2.20.old/xmlsec1.pc xmlsec1-1.2.20.new/xmlsec1.pc
+--- xmlsec1-1.2.20.old/xmlsec1.pc	2014-05-27 14:29:46.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec1.pc	2014-05-28 10:17:42.312650420 -0400
+@@ -7,5 +7,5 @@
+ Version: 1.2.20
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= 2.7.4 libxslt >= 1.0.20 
+-Cflags: -DXMLSEC_CRYPTO=\"openssl\" -DXMLSEC_CRYPTO_DYNAMIC_LOADING=1  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1  
++Cflags: -DXMLSEC_CRYPTO=\\\"openssl\\\" -DXMLSEC_CRYPTO_DYNAMIC_LOADING=1  -D__XMLSEC_FUNCTION__=__FUNCTION__ -DXMLSEC_NO_GOST=1 -DXMLSEC_NO_XKMS=1 -DXMLSEC_DL_LIBLTDL=1 -I${prefix}/include/xmlsec1  
+ Libs: -L${libdir} -lxmlsec1 -lltdl  
+diff -uPr xmlsec1-1.2.20.old/xmlsec-gcrypt.pc.in xmlsec1-1.2.20.new/xmlsec-gcrypt.pc.in
+--- xmlsec1-1.2.20.old/xmlsec-gcrypt.pc.in	2014-05-27 14:29:01.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec-gcrypt.pc.in	2014-05-28 10:17:42.312650420 -0400
+@@ -7,5 +7,5 @@
+ Version: @VERSION@
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= @LIBXML_MIN_VERSION@ libxslt >= @LIBXSLT_MIN_VERSION@
+-Cflags: -DXMLSEC_CRYPTO=\"gcrypt\" @XMLSEC_GCRYPT_CFLAGS@
++Cflags: -DXMLSEC_CRYPTO=\\\"gcrypt\\\" @XMLSEC_GCRYPT_CFLAGS@
+ Libs: @XMLSEC_GCRYPT_LIBS@
+diff -uPr xmlsec1-1.2.20.old/xmlsec-gnutls.pc.in xmlsec1-1.2.20.new/xmlsec-gnutls.pc.in
+--- xmlsec1-1.2.20.old/xmlsec-gnutls.pc.in	2014-05-27 14:29:01.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec-gnutls.pc.in	2014-05-28 10:17:42.313650427 -0400
+@@ -7,5 +7,5 @@
+ Version: @VERSION@
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= @LIBXML_MIN_VERSION@ libxslt >= @LIBXSLT_MIN_VERSION@
+-Cflags: -DXMLSEC_CRYPTO=\"gnutls\" @XMLSEC_GNUTLS_CFLAGS@
++Cflags: -DXMLSEC_CRYPTO=\\\"gnutls\\\" @XMLSEC_GNUTLS_CFLAGS@
+ Libs: @XMLSEC_GNUTLS_LIBS@
+diff -uPr xmlsec1-1.2.20.old/xmlsec-nss.pc.in xmlsec1-1.2.20.new/xmlsec-nss.pc.in
+--- xmlsec1-1.2.20.old/xmlsec-nss.pc.in	2014-05-27 14:29:01.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec-nss.pc.in	2014-05-28 10:17:42.313650427 -0400
+@@ -7,5 +7,5 @@
+ Version: @VERSION@
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= @LIBXML_MIN_VERSION@ libxslt >= @LIBXSLT_MIN_VERSION@ @NSPR_PACKAGE@ >= @MOZILLA_MIN_VERSION@ @NSS_PACKAGE@ >= @MOZILLA_MIN_VERSION@
+-Cflags: -DXMLSEC_CRYPTO=\"nss\" -DXMLSEC_CRYPTO_NSS=1 @XMLSEC_CORE_CFLAGS@
++Cflags: -DXMLSEC_CRYPTO=\\\"nss\\\" -DXMLSEC_CRYPTO_NSS=1 @XMLSEC_CORE_CFLAGS@
+ Libs: -L${libdir} -lxmlsec1-nss @XMLSEC_CORE_LIBS@
+diff -uPr xmlsec1-1.2.20.old/xmlsec-openssl.pc.in xmlsec1-1.2.20.new/xmlsec-openssl.pc.in
+--- xmlsec1-1.2.20.old/xmlsec-openssl.pc.in	2014-05-27 14:29:01.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec-openssl.pc.in	2014-05-28 10:17:42.313650427 -0400
+@@ -7,5 +7,5 @@
+ Version: @VERSION@
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= @LIBXML_MIN_VERSION@ libxslt >= @LIBXSLT_MIN_VERSION@ 
+-Cflags: -DXMLSEC_CRYPTO=\"openssl\" @XMLSEC_OPENSSL_CFLAGS@
++Cflags: -DXMLSEC_CRYPTO=\\\"openssl\\\" @XMLSEC_OPENSSL_CFLAGS@
+ Libs: @XMLSEC_OPENSSL_LIBS@
+diff -uPr xmlsec1-1.2.20.old/xmlsec.pc.in xmlsec1-1.2.20.new/xmlsec.pc.in
+--- xmlsec1-1.2.20.old/xmlsec.pc.in	2014-05-27 14:29:01.000000000 -0400
++++ xmlsec1-1.2.20.new/xmlsec.pc.in	2014-05-28 10:17:42.314650435 -0400
+@@ -7,5 +7,5 @@
+ Version: @VERSION@
+ Description: XML Security Library implements XML Signature and XML Encryption standards
+ Requires: libxml-2.0 >= @LIBXML_MIN_VERSION@ libxslt >= @LIBXSLT_MIN_VERSION@ 
+-Cflags: -DXMLSEC_CRYPTO=\"@XMLSEC_CRYPTO@\" -DXMLSEC_CRYPTO_DYNAMIC_LOADING=1 @XMLSEC_CORE_CFLAGS@
++Cflags: -DXMLSEC_CRYPTO=\\\"@XMLSEC_CRYPTO@\\\" -DXMLSEC_CRYPTO_DYNAMIC_LOADING=1 @XMLSEC_CORE_CFLAGS@
+ Libs: -L${libdir} @XMLSEC_CORE_LIBS@ 
