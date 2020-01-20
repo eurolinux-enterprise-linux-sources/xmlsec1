@@ -1,0 +1,965 @@
+diff --git a/apps/cmdline.c b/apps/cmdline.c
+index b9ecafb..eb95d9a 100644
+--- a/apps/cmdline.c
++++ b/apps/cmdline.c
+@@ -152,7 +152,7 @@ xmlSecAppCmdLineValueCreate(xmlSecAppCmdLineParamPtr param, int pos) {
+     assert(param != NULL);
+     value = (xmlSecAppCmdLineValuePtr) malloc(sizeof(xmlSecAppCmdLineValue));
+     if(value == NULL) {
+-        fprintf(stderr, "Error: malloc failed (%d bytes).\n", sizeof(xmlSecAppCmdLineValue));
++        fprintf(stderr, "Error: malloc failed (%d bytes).\n", (int)sizeof(xmlSecAppCmdLineValue));
+         return(NULL);
+     }
+     memset(value, 0, sizeof(xmlSecAppCmdLineValue));
+@@ -284,7 +284,7 @@ xmlSecAppCmdLineParamRead(xmlSecAppCmdLineParamPtr param, const char** argv, int
+             value->strValue = argv[++pos];
+             buf = (char*)malloc(strlen(value->strValue) + 2);
+             if(buf == NULL) {
+-                fprintf(stderr, "Error: failed to allocate memory (%d bytes).\n", strlen(value->strValue) + 2);
++                fprintf(stderr, "Error: failed to allocate memory (%d bytes).\n", (int)strlen(value->strValue) + 2);
+                 return(-1);
+             }
+             memset(buf, 0, strlen(value->strValue) + 2);
+diff --git a/apps/xmlsec.c b/apps/xmlsec.c
+index c2f3196..c9e5534 100644
+--- a/apps/xmlsec.c
++++ b/apps/xmlsec.c
+@@ -2986,7 +2986,7 @@ xmlSecAppWriteResult(xmlDocPtr doc, xmlSecBufferPtr buffer) {
+     if(doc != NULL) {
+         xmlDocDump(f, doc);    
+     } else if((buffer != NULL) && (xmlSecBufferGetData(buffer) != NULL)) {
+-        fwrite(xmlSecBufferGetData(buffer), xmlSecBufferGetSize(buffer), 1, f); 
++        (void)fwrite(xmlSecBufferGetData(buffer), xmlSecBufferGetSize(buffer), 1, f); 
+     } else {
+         fprintf(stderr, "Error: both result doc and result buffer are null\n"); 
+         xmlSecAppCloseFile(f);
+diff --git a/docs/index.html b/docs/index.html
+index c46aefe..96fea05 100644
+--- a/docs/index.html
++++ b/docs/index.html
+@@ -70,7 +70,7 @@ see the Copyright file in the distribution  for details.<br><br></p>
+         The <a href="download.html">XML Security Library 1.2.20</a> release fixes a number of miscellaneous bugs and 
+         updates expired or soon-to-be-expired certificates in the test suite.
+ </li>
+-<li>March 24 2013<br>
++<br><li>March 24 2013<br>
+         The <a href="download.html">XML Security Library 1.2.19</a> release adds support for DSA-SHA256, ECDSA-SHA1,
+         ECDSA-SHA224, ECDSA-SHA256, ECDSA-SHA384, ECDSA-SHA512 and fixes a number of miscellaneous bugs.
+ </li>
+diff --git a/docs/news.html b/docs/news.html
+index c0ff702..8aaa252 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -51,7 +51,7 @@
+         The <a href="download.html">XML Security Library 1.2.20</a> release fixes a number of miscellaneous bugs and 
+         updates expired or soon-to-be-expired certificates in the test suite.
+ </li>
+-<li>March 24 2013<br>
++<br><li>March 24 2013<br>
+         The <a href="download.html">XML Security Library 1.2.19</a> release adds support for DSA-SHA256, ECDSA-SHA1,
+         ECDSA-SHA224, ECDSA-SHA256, ECDSA-SHA384, ECDSA-SHA512 and fixes a number of miscellaneous bugs.
+ </li>
+diff --git a/include/xmlsec/openssl/crypto.h b/include/xmlsec/openssl/crypto.h
+index aec5fb3..b2fbea9 100644
+--- a/include/xmlsec/openssl/crypto.h
++++ b/include/xmlsec/openssl/crypto.h
+@@ -308,7 +308,7 @@ XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecOpenSSLTransformGost2001GostR3411_9
+  * The GOSTR3411_94 signature transform klass.
+  */
+ #define xmlSecOpenSSLTransformGostR3411_94Id \
+-	xmlSecOpenSSLTransformGostR3411_94GetKlass()
++		xmlSecOpenSSLTransformGostR3411_94GetKlass()
+ XMLSEC_CRYPTO_EXPORT xmlSecTransformId xmlSecOpenSSLTransformGostR3411_94GetKlass(void);
+ 
+ #endif /* XMLSEC_NO_GOST */
+diff --git a/src/base64.c b/src/base64.c
+index 53e6694..0546582 100644
+--- a/src/base64.c
++++ b/src/base64.c
+@@ -161,7 +161,7 @@ xmlSecBase64CtxCreate(int encode, int columns) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecBase64Ctx)=%d",
+-                    sizeof(xmlSecBase64Ctx));
++                    (int)sizeof(xmlSecBase64Ctx));
+         return(NULL);
+     }
+ 
+diff --git a/src/buffer.c b/src/buffer.c
+index 0efbfed..52c5fc9 100644
+--- a/src/buffer.c
++++ b/src/buffer.c
+@@ -67,7 +67,7 @@ xmlSecBufferCreate(xmlSecSize size) {
+                     NULL,
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    "sizeof(xmlSecBuffer)=%d", sizeof(xmlSecBuffer));
++                    "sizeof(xmlSecBuffer)=%d", (int)sizeof(xmlSecBuffer));
+         return(NULL);
+     }
+ 
+diff --git a/src/dl.c b/src/dl.c
+index 5ffc2ff..255818f 100644
+--- a/src/dl.c
++++ b/src/dl.c
+@@ -102,7 +102,7 @@ xmlSecCryptoDLLibraryCreate(const xmlChar* name) {
+                     NULL,
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    "size=%d", sizeof(lib));
++                    "size=%d", (int)sizeof(lib));
+         return(NULL);
+     }
+     memset(lib, 0, sizeof(xmlSecCryptoDLLibrary));
+diff --git a/src/gcrypt/asn1.c b/src/gcrypt/asn1.c
+index 9a2b5cf..f718139 100644
+--- a/src/gcrypt/asn1.c
++++ b/src/gcrypt/asn1.c
+@@ -304,11 +304,11 @@ xmlSecGCryptParseDer(const xmlSecByte * der, xmlSecSize derlen,
+         case 3:
+             /* Public RSA */
+             type = xmlSecGCryptDerKeyTypePublicRsa;
+-	    break;
++            break;
+         case 5:
+             /* Public DSA */
+             type = xmlSecGCryptDerKeyTypePublicDsa;
+-	    break;
++            break;
+         case 6:
+             /* Private DSA */
+             type = xmlSecGCryptDerKeyTypePrivateDsa;
+diff --git a/src/io.c b/src/io.c
+index 42e9133..3f3b9ef 100644
+--- a/src/io.c
++++ b/src/io.c
+@@ -66,7 +66,7 @@ xmlSecIOCallbackCreate(xmlInputMatchCallback matchFunc, xmlInputOpenCallback ope
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecIOCallback)=%d",
+-                    sizeof(xmlSecIOCallback));
++                    (int)sizeof(xmlSecIOCallback));
+         return(NULL);
+     }
+     memset(callbacks, 0, sizeof(xmlSecIOCallback));
+diff --git a/src/keyinfo.c b/src/keyinfo.c
+index 00390fa..7fc6a4b 100644
+--- a/src/keyinfo.c
++++ b/src/keyinfo.c
+@@ -227,7 +227,7 @@ xmlSecKeyInfoCtxCreate(xmlSecKeysMngrPtr keysMngr) {
+                     NULL,
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    "size=%d", sizeof(xmlSecKeyInfoCtx));
++                    "size=%d", (int)sizeof(xmlSecKeyInfoCtx));
+         return(NULL);
+     }
+ 
+@@ -761,7 +761,16 @@ xmlSecKeyDataNameXmlRead(xmlSecKeyDataId id, xmlSecKeyPtr key, xmlNodePtr node,
+ 
+     /* finally set key name if it is not there */
+     if(xmlSecKeyGetName(key) == NULL) {
+-        xmlSecKeySetName(key, newName);
++        ret = xmlSecKeySetName(key, newName);
++        if(ret < 0) {
++            xmlSecError(XMLSEC_ERRORS_HERE,
++                        xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
++                        "xmlSecKeySetName",
++                        XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                        XMLSEC_ERRORS_NO_MESSAGE);
++            xmlFree(newName);
++            return(-1);
++        }
+     }
+     xmlFree(newName);
+     return(0);
+diff --git a/src/keys.c b/src/keys.c
+index 1d2f733..27f3690 100644
+--- a/src/keys.c
++++ b/src/keys.c
+@@ -112,7 +112,7 @@ xmlSecKeyUseWithCreate(const xmlChar* application, const xmlChar* identifier) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecKeyUseWith)=%d",
+-                    sizeof(xmlSecKeyUseWith));
++                    (int)sizeof(xmlSecKeyUseWith));
+         return(NULL);
+     }
+     memset(keyUseWith, 0, sizeof(xmlSecKeyUseWith));
+@@ -548,7 +548,7 @@ xmlSecKeyCreate(void)  {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecKey)=%d",
+-                    sizeof(xmlSecKey));
++                    (int)sizeof(xmlSecKey));
+         return(NULL);
+     }
+     memset(key, 0, sizeof(xmlSecKey));
+diff --git a/src/keysdata.c b/src/keysdata.c
+index de854ba..0367b16 100644
+--- a/src/keysdata.c
++++ b/src/keysdata.c
+@@ -255,7 +255,7 @@ xmlSecKeyDataDuplicate(xmlSecKeyDataPtr data) {
+     }
+ 
+     ret = (data->id->duplicate)(newData, data);
+-    if(newData == NULL) {
++    if(ret < 0) {
+         xmlSecError(XMLSEC_ERRORS_HERE,
+                     xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
+                     "id->duplicate",
+diff --git a/src/keysmngr.c b/src/keysmngr.c
+index 31a03e9..ad253c9 100644
+--- a/src/keysmngr.c
++++ b/src/keysmngr.c
+@@ -53,7 +53,7 @@ xmlSecKeysMngrCreate(void) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecKeysMngr)=%d",
+-                    sizeof(xmlSecKeysMngr));
++                    (int)sizeof(xmlSecKeysMngr));
+         return(NULL);
+     }
+     memset(mngr, 0, sizeof(xmlSecKeysMngr));
+diff --git a/src/list.c b/src/list.c
+index d1a0053..1d48cc6 100644
+--- a/src/list.c
++++ b/src/list.c
+@@ -65,7 +65,7 @@ xmlSecPtrListCreate(xmlSecPtrListId id) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecPtrList)=%d",
+-                    sizeof(xmlSecPtrList));
++                    (int)sizeof(xmlSecPtrList));
+         return(NULL);
+     }
+ 
+@@ -479,7 +479,7 @@ xmlSecPtrListEnsureSize(xmlSecPtrListPtr list, xmlSecSize size) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecPtr)*%d=%d",
+-                    newSize, sizeof(xmlSecPtr) * newSize);
++                    newSize, (int)(sizeof(xmlSecPtr) * newSize));
+         return(-1);
+     }
+ 
+diff --git a/src/mscrypto/x509vfy.c b/src/mscrypto/x509vfy.c
+index 16b63db..6541a6c 100644
+--- a/src/mscrypto/x509vfy.c
++++ b/src/mscrypto/x509vfy.c
+@@ -1183,7 +1183,7 @@ xmlSecMSCryptoX509GetCertName(const xmlChar * name) {
+                     "xmlSecMSCryptoConvertUtf8ToTstr",
+                     XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                     XMLSEC_ERRORS_NO_MESSAGE);
+-	xmlFree(name2);
++        xmlFree(name2);
+         return(NULL);
+     }
+ 
+diff --git a/src/nodeset.c b/src/nodeset.c
+index 04ae810..fbb3ecd 100644
+--- a/src/nodeset.c
++++ b/src/nodeset.c
+@@ -57,7 +57,7 @@ xmlSecNodeSetCreate(xmlDocPtr doc, xmlNodeSetPtr nodes, xmlSecNodeSetType type)
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecNodeSet)=%d",
+-                    sizeof(xmlSecNodeSet));
++                    (int)sizeof(xmlSecNodeSet));
+         return(NULL);
+     }
+     memset(nset, 0,  sizeof(xmlSecNodeSet));
+diff --git a/src/nss/keysstore.c b/src/nss/keysstore.c
+index f07e44b..057fc45 100644
+--- a/src/nss/keysstore.c
++++ b/src/nss/keysstore.c
+@@ -271,7 +271,7 @@ xmlSecNssKeysStoreInitialize(xmlSecKeyStorePtr store) {
+     xmlSecAssert2(xmlSecKeyStoreCheckId(store, xmlSecNssKeysStoreId), -1);
+ 
+     ss = xmlSecNssKeysStoreGetSS(store);
+-    xmlSecAssert2((*ss == NULL), -1);
++    xmlSecAssert2(((ss == NULL) || (*ss == NULL)), -1);
+ 
+     *ss = xmlSecKeyStoreCreate(xmlSecSimpleKeysStoreId);
+     if(*ss == NULL) {
+diff --git a/src/nss/pkikeys.c b/src/nss/pkikeys.c
+index ae9e29b..5ede4cc 100644
+--- a/src/nss/pkikeys.c
++++ b/src/nss/pkikeys.c
+@@ -752,6 +752,15 @@ xmlSecNssKeyDataDsaXmlRead(xmlSecKeyDataId id, xmlSecKeyPtr key,
+     }
+ 
+     handle = PK11_ImportPublicKey(slot, pubkey, PR_FALSE);
++    if(handle == CK_INVALID_HANDLE) {
++        xmlSecError(XMLSEC_ERRORS_HERE,
++                    xmlSecErrorsSafeString(xmlSecKeyDataKlassGetName(id)),
++                    "PK11_ImportPublicKey",
++                    XMLSEC_ERRORS_R_CRYPTO_FAILED,
++                    XMLSEC_ERRORS_NO_MESSAGE);
++        ret = -1;
++        goto done;
++    }
+ 
+     data = xmlSecKeyDataCreate(id);
+     if(data == NULL ) {
+diff --git a/src/nss/x509vfy.c b/src/nss/x509vfy.c
+index fdb866f..9e957fe 100644
+--- a/src/nss/x509vfy.c
++++ b/src/nss/x509vfy.c
+@@ -233,7 +233,8 @@ xmlSecNssX509StoreVerify(xmlSecKeyDataStorePtr store, CERTCertList* certs,
+                         NULL,
+                         XMLSEC_ERRORS_R_CERT_ISSUER_FAILED,
+                         "cert with subject name %s could not be verified because the issuer's cert is expired/invalid or not found",
+-                        cert->subjectName);
++                        (cert != NULL) ? cert->subjectName : "(NULL)"
++            );
+             break;
+         case SEC_ERROR_EXPIRED_CERTIFICATE:
+             xmlSecError(XMLSEC_ERRORS_HERE,
+@@ -241,7 +242,8 @@ xmlSecNssX509StoreVerify(xmlSecKeyDataStorePtr store, CERTCertList* certs,
+                         NULL,
+                         XMLSEC_ERRORS_R_CERT_HAS_EXPIRED,
+                         "cert with subject name %s has expired",
+-                        cert->subjectName);
++                        (cert != NULL) ? cert->subjectName : "(NULL)"
++            );
+             break;
+         case SEC_ERROR_REVOKED_CERTIFICATE:
+             xmlSecError(XMLSEC_ERRORS_HERE,
+@@ -249,15 +251,16 @@ xmlSecNssX509StoreVerify(xmlSecKeyDataStorePtr store, CERTCertList* certs,
+                         NULL,
+                         XMLSEC_ERRORS_R_CERT_REVOKED,
+                         "cert with subject name %s has been revoked",
+-                        cert->subjectName);
++                        (cert != NULL) ? cert->subjectName : "(NULL)"
++            );
+             break;
+         default:
+             xmlSecError(XMLSEC_ERRORS_HERE,
+                         xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(store)),
+                         NULL,
+                         XMLSEC_ERRORS_R_CERT_VERIFY_FAILED,
+-                                                "cert with subject name %s could not be verified, errcode %d",
+-                                                cert->subjectName,
++                        "cert with subject name %s could not be verified, errcode %d",
++                        (cert != NULL) ? cert->subjectName : "(NULL)",
+                         PORT_GetError());
+             break;
+     }
+@@ -690,11 +693,10 @@ xmlSecNssX509NameRead(xmlSecByte *str, int len) {
+                 }
+                 memcpy(p, value, valueLen);
+                 p+=valueLen;
+-                if (len > 0)
++                if (len > 0) {
+                     *p++=',';
++                }
+             }
+-        } else {
+-            valueLen = 0;
+         }
+         if(len > 0) {
+             ++str; --len;
+diff --git a/src/openssl/app.c b/src/openssl/app.c
+index 4f8f79e..4154d2e 100644
+--- a/src/openssl/app.c
++++ b/src/openssl/app.c
+@@ -255,7 +255,7 @@ xmlSecOpenSSLAppKeyLoadBIO(BIO* bio, xmlSecKeyDataFormat format,
+         }
+         if(pKey == NULL) {
+             /* go to start of the file and try to read public key */
+-            BIO_reset(bio);
++            (void)BIO_reset(bio);
+             pKey = PEM_read_bio_PUBKEY(bio, NULL,
+                             XMLSEC_PTR_TO_FUNC(pem_password_cb, pwdCallback),
+                             pwdCallbackCtx);
+@@ -274,7 +274,7 @@ xmlSecOpenSSLAppKeyLoadBIO(BIO* bio, xmlSecKeyDataFormat format,
+         pKey = d2i_PrivateKey_bio(bio, NULL);
+         if(pKey == NULL) {
+             /* go to start of the file and try to read public key */
+-            BIO_reset(bio);
++            (void)BIO_reset(bio);
+             pKey = d2i_PUBKEY_bio(bio, NULL);
+             if(pKey == NULL) {
+                 xmlSecError(XMLSEC_ERRORS_HERE,
+diff --git a/src/openssl/digests.c b/src/openssl/digests.c
+index fa26fa6..b103035 100644
+--- a/src/openssl/digests.c
++++ b/src/openssl/digests.c
+@@ -174,15 +174,14 @@ xmlSecOpenSSLEvpDigestInitialize(xmlSecTransformPtr transform) {
+ #ifndef XMLSEC_NO_GOST
+     if(xmlSecTransformCheckId(transform, xmlSecOpenSSLTransformGostR3411_94Id)) {
+         ctx->digest = EVP_get_digestbyname("md_gost94");
+-				if (!ctx->digest)
+-				{
+-        xmlSecError(XMLSEC_ERRORS_HERE,
+-                    xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
+-                    NULL,
+-                    XMLSEC_ERRORS_R_INVALID_TRANSFORM,
+-                    XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
+-				}
++		if (!ctx->digest) {
++			xmlSecError(XMLSEC_ERRORS_HERE,
++					xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++					NULL,
++					XMLSEC_ERRORS_R_INVALID_TRANSFORM,
++					XMLSEC_ERRORS_NO_MESSAGE);
++			return(-1);
++		}
+     } else
+ #endif /* XMLSEC_NO_GOST*/
+ 
+diff --git a/src/openssl/evp.c b/src/openssl/evp.c
+index e042f26..464a5a3 100644
+--- a/src/openssl/evp.c
++++ b/src/openssl/evp.c
+@@ -1060,8 +1060,8 @@ static xmlSecKeyDataKlass xmlSecOpenSSLKeyDataEcdsaKlass = {
+     NULL,                                       /* xmlSecKeyDataGetIdentifier getIdentifier; */
+ 
+     /* read/write */
+-    NULL,           				/* xmlSecKeyDataXmlReadMethod xmlRead; */
+-    NULL,           				/* xmlSecKeyDataXmlWriteMethod xmlWrite; */
++    NULL,                                       /* xmlSecKeyDataXmlReadMethod xmlRead; */
++    NULL,                                       /* xmlSecKeyDataXmlWriteMethod xmlWrite; */
+     NULL,                                       /* xmlSecKeyDataBinReadMethod binRead; */
+     NULL,                                       /* xmlSecKeyDataBinWriteMethod binWrite; */
+ 
+@@ -1887,17 +1887,17 @@ static xmlSecKeyDataKlass xmlSecOpenSSLKeyDataGost2001Klass = {
+     /* get info */
+     xmlSecOpenSSLKeyDataGost2001GetType,       /* xmlSecKeyDataGetTypeMethod getType; */
+     xmlSecOpenSSLKeyDataGost2001GetSize,       /* xmlSecKeyDataGetSizeMethod getSize; */
+-    NULL,                               /* xmlSecKeyDataGetIdentifier getIdentifier; */
++    NULL,                                      /* xmlSecKeyDataGetIdentifier getIdentifier; */
+ 
+     /* read/write */
+-    NULL,       /* xmlSecKeyDataXmlReadMethod xmlRead; */
+-    NULL,       /* xmlSecKeyDataXmlWriteMethod xmlWrite; */
+-    NULL,                               /* xmlSecKeyDataBinReadMethod binRead; */
+-    NULL,                               /* xmlSecKeyDataBinWriteMethod binWrite; */
++    NULL,                                      /* xmlSecKeyDataXmlReadMethod xmlRead; */
++    NULL,                                      /* xmlSecKeyDataXmlWriteMethod xmlWrite; */
++    NULL,                                      /* xmlSecKeyDataBinReadMethod binRead; */
++    NULL,                                      /* xmlSecKeyDataBinWriteMethod binWrite; */
+ 
+     /* debug */
+     xmlSecOpenSSLKeyDataGost2001DebugDump,     /* xmlSecKeyDataDebugDumpMethod debugDump; */
+-    xmlSecOpenSSLKeyDataGost2001DebugXmlDump,/* xmlSecKeyDataDebugDumpMethod debugXmlDump; */
++    xmlSecOpenSSLKeyDataGost2001DebugXmlDump,  /* xmlSecKeyDataDebugDumpMethod debugXmlDump; */
+ 
+     /* reserved for the future */
+     NULL,                               /* void* reserved0; */
+@@ -1941,9 +1941,9 @@ xmlSecOpenSSLKeyDataGost2001Finalize(xmlSecKeyDataPtr data) {
+ 
+ static xmlSecKeyDataType
+ xmlSecOpenSSLKeyDataGost2001GetType(xmlSecKeyDataPtr data) {
+-	/* Now I don't know how to find whether we have both private and public key 
+-	or the public only*/
+-	return(xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate);
++    /* Now I don't know how to find whether we have both private and public key 
++    or the public only*/
++    return(xmlSecKeyDataTypePublic | xmlSecKeyDataTypePrivate);
+ }
+ 
+ static xmlSecSize
+diff --git a/src/openssl/kt_rsa.c b/src/openssl/kt_rsa.c
+index 1cf1aba..8c022d5 100644
+--- a/src/openssl/kt_rsa.c
++++ b/src/openssl/kt_rsa.c
+@@ -845,7 +845,12 @@ xmlSecOpenSSLRsaOaepProcess(xmlSecTransformPtr transform, xmlSecTransformCtxPtr
+         }
+         outSize = ret;
+     } else {
+-        xmlSecAssert2("we could not be here" == NULL, -1);
++        xmlSecError(XMLSEC_ERRORS_HERE,
++                    xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
++                    "",
++                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                    "Unexpected trasnform operation: %d; paramsSize: %d",
++                    (int)transform->operation, (int)paramsSize);
+         return(-1);
+     }
+ 
+diff --git a/src/openssl/signatures.c b/src/openssl/signatures.c
+index 7e3dbc7..6751ba0 100644
+--- a/src/openssl/signatures.c
++++ b/src/openssl/signatures.c
+@@ -345,15 +345,14 @@ xmlSecOpenSSLEvpSignatureInitialize(xmlSecTransformPtr transform) {
+     if(xmlSecTransformCheckId(transform, xmlSecOpenSSLTransformGost2001GostR3411_94Id)) {
+         ctx->keyId          = xmlSecOpenSSLKeyDataGost2001Id;
+         ctx->digest = EVP_get_digestbyname("md_gost94");
+-				if (!ctx->digest)
+-				{
+-        xmlSecError(XMLSEC_ERRORS_HERE,
++        if (!ctx->digest) {
++        	xmlSecError(XMLSEC_ERRORS_HERE,
+                     xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
+                     NULL,
+                     XMLSEC_ERRORS_R_INVALID_TRANSFORM,
+                     XMLSEC_ERRORS_NO_MESSAGE);
+-        return(-1);
+-				}
++        	return(-1);
++        }
+     } else
+ #endif /* XMLSEC_NO_GOST*/
+ 
+diff --git a/src/openssl/x509.c b/src/openssl/x509.c
+index 459a312..11f4571 100644
+--- a/src/openssl/x509.c
++++ b/src/openssl/x509.c
+@@ -1941,7 +1941,7 @@ xmlSecOpenSSLX509CertBase64DerWrite(X509* cert, int base64LineWrap) {
+ 
+     /* todo: add error checks */
+     i2d_X509_bio(mem, cert);
+-    BIO_flush(mem);
++    (void)BIO_flush(mem);
+ 
+     size = BIO_get_mem_data(mem, &p);
+     if((size <= 0) || (p == NULL)){
+@@ -2055,7 +2055,7 @@ xmlSecOpenSSLX509CrlBase64DerWrite(X509_CRL* crl, int base64LineWrap) {
+ 
+     /* todo: add error checks */
+     i2d_X509_CRL_bio(mem, crl);
+-    BIO_flush(mem);
++    (void)BIO_flush(mem);
+ 
+     size = BIO_get_mem_data(mem, &p);
+     if((size <= 0) || (p == NULL)){
+@@ -2111,7 +2111,7 @@ xmlSecOpenSSLX509NameWrite(X509_NAME* nm) {
+         return(NULL);
+     }
+ 
+-    BIO_flush(mem); /* should call flush ? */
++    (void)BIO_flush(mem); /* should call flush ? */
+ 
+     size = BIO_pending(mem);
+     res = xmlMalloc(size + 1);
+diff --git a/src/openssl/x509vfy.c b/src/openssl/x509vfy.c
+index ca5a462..370694d 100644
+--- a/src/openssl/x509vfy.c
++++ b/src/openssl/x509vfy.c
+@@ -178,7 +178,7 @@ xmlSecOpenSSLX509StoreVerify(xmlSecKeyDataStorePtr store, XMLSEC_STACK_OF_X509*
+     X509 * cert;
+     X509 * err_cert = NULL;
+     char buf[256];
+-    int err = 0, depth;
++    int err = 0;
+     int i;
+     int ret;
+ 
+@@ -287,49 +287,43 @@ xmlSecOpenSSLX509StoreVerify(xmlSecKeyDataStorePtr store, XMLSEC_STACK_OF_X509*
+         if(xmlSecOpenSSLX509FindNextChainCert(certs2, cert) == NULL) {
+             X509_STORE_CTX xsc;
+ 
+-#if !defined(XMLSEC_OPENSSL_096) && !defined(XMLSEC_OPENSSL_097)
+-            X509_VERIFY_PARAM * vpm = NULL;
+-            unsigned long vpm_flags = 0;
+-
+-            vpm = X509_VERIFY_PARAM_new();
+-            if(vpm == NULL) {
+-                xmlSecError(XMLSEC_ERRORS_HERE,
+-                            xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(store)),
+-                            "X509_VERIFY_PARAM_new",
+-                            XMLSEC_ERRORS_R_CRYPTO_FAILED,
+-                            XMLSEC_ERRORS_NO_MESSAGE);
+-                goto done;
+-            }
+-            vpm_flags = vpm->flags;
+-/*
+-            vpm_flags &= (~X509_V_FLAG_X509_STRICT);
+-*/
+-            vpm_flags &= (~X509_V_FLAG_CRL_CHECK);
+-
+-            X509_VERIFY_PARAM_set_depth(vpm, 9);
+-            X509_VERIFY_PARAM_set_flags(vpm, vpm_flags);
+-#endif /* !defined(XMLSEC_OPENSSL_096) && !defined(XMLSEC_OPENSSL_097) */
+-
+-
+             X509_STORE_CTX_init (&xsc, ctx->xst, cert, certs2);
+-
+             if(keyInfoCtx->certsVerificationTime > 0) {
+-#if !defined(XMLSEC_OPENSSL_096) && !defined(XMLSEC_OPENSSL_097)
+-                vpm_flags |= X509_V_FLAG_USE_CHECK_TIME;
+-                X509_VERIFY_PARAM_set_time(vpm, keyInfoCtx->certsVerificationTime);
+-#endif /* !defined(XMLSEC_OPENSSL_096) && !defined(XMLSEC_OPENSSL_097) */
+                 X509_STORE_CTX_set_time(&xsc, 0, keyInfoCtx->certsVerificationTime);
+             }
+ 
+ #if !defined(XMLSEC_OPENSSL_096) && !defined(XMLSEC_OPENSSL_097)
+-            X509_STORE_CTX_set0_param(&xsc, vpm);
++            {
++                X509_VERIFY_PARAM * vpm = NULL;
++                unsigned long vpm_flags = 0;
++
++                vpm = X509_VERIFY_PARAM_new();
++                if(vpm == NULL) {
++                    xmlSecError(XMLSEC_ERRORS_HERE,
++                                xmlSecErrorsSafeString(xmlSecKeyDataStoreGetName(store)),
++                                "X509_VERIFY_PARAM_new",
++                                XMLSEC_ERRORS_R_CRYPTO_FAILED,
++                                XMLSEC_ERRORS_NO_MESSAGE);
++                    goto done;
++                }
++                vpm_flags = vpm->flags;
++                vpm_flags &= (~X509_V_FLAG_CRL_CHECK);
++
++                if(keyInfoCtx->certsVerificationTime > 0) {
++                    vpm_flags |= X509_V_FLAG_USE_CHECK_TIME;
++                    X509_VERIFY_PARAM_set_time(vpm, keyInfoCtx->certsVerificationTime);
++                }
++
++                X509_VERIFY_PARAM_set_depth(vpm, 9);
++                X509_VERIFY_PARAM_set_flags(vpm, vpm_flags);
++                X509_STORE_CTX_set0_param(&xsc, vpm);
++            }
+ #endif /* !defined(XMLSEC_OPENSSL_096) && !defined(XMLSEC_OPENSSL_097) */
+ 
+ 
+             ret         = X509_verify_cert(&xsc);
+             err_cert    = X509_STORE_CTX_get_current_cert(&xsc);
+             err         = X509_STORE_CTX_get_error(&xsc);
+-            depth       = X509_STORE_CTX_get_error_depth(&xsc);
+ 
+             X509_STORE_CTX_cleanup (&xsc);
+ 
+diff --git a/src/parser.c b/src/parser.c
+index 990ff98..dd902d4 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -159,7 +159,7 @@ xmlSecParserPushBin(xmlSecTransformPtr transform, const xmlSecByte* data,
+         /* required for c14n! */
+         ctx->parserCtx->loadsubset      = XML_DETECT_IDS | XML_COMPLETE_ATTRS;
+         ctx->parserCtx->replaceEntities = 1;
+-	ctx->parserCtx->options         = XML_PARSE_NONET;
++        ctx->parserCtx->options         = XML_PARSE_NONET;
+ 
+         transform->status = xmlSecTransformStatusWorking;
+     } else if(transform->status == xmlSecTransformStatusFinished) {
+@@ -317,7 +317,7 @@ xmlSecParserPopXml(xmlSecTransformPtr transform, xmlSecNodeSetPtr* nodes,
+     }
+ 
+     ret = inputPush(ctxt, input);
+-    if(input == NULL) {
++    if(ret < 0) {
+         xmlSecError(XMLSEC_ERRORS_HERE,
+                     xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
+                     "inputPush",
+diff --git a/src/transforms.c b/src/transforms.c
+index 8a2ded2..d384a0e 100644
+--- a/src/transforms.c
++++ b/src/transforms.c
+@@ -355,7 +355,7 @@ xmlSecTransformCtxCreate(void) {
+                     NULL,
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    "size=%d", sizeof(xmlSecTransformCtx));
++                    "size=%d", (int)sizeof(xmlSecTransformCtx));
+         return(NULL);
+     }
+ 
+@@ -876,7 +876,7 @@ xmlSecTransformCtxSetUri(xmlSecTransformCtxPtr ctx, const xmlChar* uri, xmlNodeP
+                     NULL,
+                     NULL,
+                     XMLSEC_ERRORS_R_STRDUP_FAILED,
+-                    "size=%d", xptr - uri);
++                    "size=%d", (int)(xptr - uri));
+         return(-1);
+     }
+ 
+@@ -932,6 +932,9 @@ xmlSecTransformCtxSetUri(xmlSecTransformCtxPtr ctx, const xmlChar* uri, xmlNodeP
+                         XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                         "transform=%s",
+                         xmlSecErrorsSafeString(xmlSecTransformKlassGetName(xmlSecTransformXPointerId)));
++            if(buf != NULL) {
++                xmlFree(buf);
++            }
+             return(-1);
+         }
+ 
+@@ -965,6 +968,9 @@ xmlSecTransformCtxSetUri(xmlSecTransformCtxPtr ctx, const xmlChar* uri, xmlNodeP
+                         XMLSEC_ERRORS_R_XMLSEC_FAILED,
+                         "transform=%s",
+                         xmlSecErrorsSafeString(xmlSecTransformKlassGetName(xmlSecTransformVisa3DHackId)));
++            if(buf != NULL) {
++                xmlFree(buf);
++            }
+             return(-1);
+         }
+ 
+@@ -2810,7 +2816,7 @@ xmlSecTransformIOBufferCreate(xmlSecTransformIOBufferMode mode, xmlSecTransformP
+                     NULL,
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+-                    "size=%d", sizeof(xmlSecTransformIOBuffer));
++                    "size=%d", (int)sizeof(xmlSecTransformIOBuffer));
+         return(NULL);
+     }
+     memset(buffer, 0, sizeof(xmlSecTransformIOBuffer));
+diff --git a/src/xmldsig.c b/src/xmldsig.c
+index b08b8b1..10ba03f 100644
+--- a/src/xmldsig.c
++++ b/src/xmldsig.c
+@@ -73,7 +73,7 @@ xmlSecDSigCtxCreate(xmlSecKeysMngrPtr keysMngr) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecDSigCtx)=%d",
+-                    sizeof(xmlSecDSigCtx));
++                    (int)sizeof(xmlSecDSigCtx));
+         return(NULL);
+     }
+ 
+@@ -160,10 +160,26 @@ xmlSecDSigCtxInitialize(xmlSecDSigCtxPtr dsigCtx, xmlSecKeysMngrPtr keysMngr) {
+     }
+ 
+     /* references lists from SignedInfo and Manifest elements */
+-    xmlSecPtrListInitialize(&(dsigCtx->signedInfoReferences),
+-                            xmlSecDSigReferenceCtxListId);
+-    xmlSecPtrListInitialize(&(dsigCtx->manifestReferences),
+-                            xmlSecDSigReferenceCtxListId);
++    ret = xmlSecPtrListInitialize(&(dsigCtx->signedInfoReferences),
++                                  xmlSecDSigReferenceCtxListId);
++    if(ret != 0) {
++        xmlSecError(XMLSEC_ERRORS_HERE,
++                    NULL,
++                    "xmlSecPtrListInitialize",
++                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                    XMLSEC_ERRORS_NO_MESSAGE);
++        return(ret);
++    }
++    ret = xmlSecPtrListInitialize(&(dsigCtx->manifestReferences),
++                                  xmlSecDSigReferenceCtxListId);
++    if(ret != 0) {
++        xmlSecError(XMLSEC_ERRORS_HERE,
++                    NULL,
++                    "xmlSecPtrListInitialize",
++                    XMLSEC_ERRORS_R_XMLSEC_FAILED,
++                    XMLSEC_ERRORS_NO_MESSAGE);
++        return(ret);
++    }
+ 
+     dsigCtx->enabledReferenceUris = xmlSecTransformUriTypeAny;
+     return(0);
+@@ -773,7 +789,9 @@ xmlSecDSigCtxProcessSignedInfoNode(xmlSecDSigCtxPtr dsigCtx, xmlNodePtr node) {
+     dsigCtx->signMethod->operation = dsigCtx->operation;
+ 
+     /* calculate references */
+-    cur = xmlSecGetNextElementNode(cur->next);
++    if(cur != NULL) {
++        cur = xmlSecGetNextElementNode(cur->next);
++    }
+     while((cur != NULL) && (xmlSecCheckNodeName(cur, xmlSecNodeReference, xmlSecDSigNs))) {
+         /* create reference */
+         dsigRefCtx = xmlSecDSigReferenceCtxCreate(dsigCtx, xmlSecDSigReferenceOriginSignedInfo);
+@@ -1118,9 +1136,9 @@ xmlSecDSigCtxDebugDump(xmlSecDSigCtxPtr dsigCtx, FILE* output) {
+        (xmlSecBufferGetData(dsigCtx->result) != NULL)) {
+ 
+         fprintf(output, "== Result - start buffer:\n");
+-        fwrite(xmlSecBufferGetData(dsigCtx->result),
+-               xmlSecBufferGetSize(dsigCtx->result),
+-               1, output);
++        (void)fwrite(xmlSecBufferGetData(dsigCtx->result),
++                     xmlSecBufferGetSize(dsigCtx->result),
++                     1, output);
+         fprintf(output, "\n== Result - end buffer\n");
+     }
+     if(((dsigCtx->flags & XMLSEC_DSIG_FLAGS_STORE_SIGNATURE) != 0) &&
+@@ -1128,9 +1146,9 @@ xmlSecDSigCtxDebugDump(xmlSecDSigCtxPtr dsigCtx, FILE* output) {
+        (xmlSecBufferGetData(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)) != NULL)) {
+ 
+         fprintf(output, "== PreSigned data - start buffer:\n");
+-        fwrite(xmlSecBufferGetData(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
+-               xmlSecBufferGetSize(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
+-               1, output);
++        (void)fwrite(xmlSecBufferGetData(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
++                     xmlSecBufferGetSize(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
++                     1, output);
+         fprintf(output, "\n== PreSigned data - end buffer\n");
+     }
+ }
+@@ -1207,9 +1225,9 @@ xmlSecDSigCtxDebugXmlDump(xmlSecDSigCtxPtr dsigCtx, FILE* output) {
+        (xmlSecBufferGetData(dsigCtx->result) != NULL)) {
+ 
+         fprintf(output, "<Result>");
+-        fwrite(xmlSecBufferGetData(dsigCtx->result),
+-               xmlSecBufferGetSize(dsigCtx->result),
+-               1, output);
++        (void)fwrite(xmlSecBufferGetData(dsigCtx->result),
++                     xmlSecBufferGetSize(dsigCtx->result),
++                     1, output);
+         fprintf(output, "</Result>\n");
+     }
+     if(((dsigCtx->flags & XMLSEC_DSIG_FLAGS_STORE_SIGNATURE) != 0) &&
+@@ -1217,9 +1235,9 @@ xmlSecDSigCtxDebugXmlDump(xmlSecDSigCtxPtr dsigCtx, FILE* output) {
+        (xmlSecBufferGetData(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)) != NULL)) {
+ 
+         fprintf(output, "<PreSignedData>");
+-        fwrite(xmlSecBufferGetData(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
+-               xmlSecBufferGetSize(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
+-               1, output);
++        (void)fwrite(xmlSecBufferGetData(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
++                     xmlSecBufferGetSize(xmlSecDSigCtxGetPreSignBuffer(dsigCtx)),
++                     1, output);
+         fprintf(output, "</PreSignedData>\n");
+     }
+ 
+@@ -1260,7 +1278,7 @@ xmlSecDSigReferenceCtxCreate(xmlSecDSigCtxPtr dsigCtx, xmlSecDSigReferenceOrigin
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecDSigReferenceCtx)=%d",
+-                    sizeof(xmlSecDSigReferenceCtx));
++                    (int)sizeof(xmlSecDSigReferenceCtx));
+         return(NULL);
+     }
+ 
+@@ -1669,9 +1687,9 @@ xmlSecDSigReferenceCtxDebugDump(xmlSecDSigReferenceCtxPtr dsigRefCtx, FILE* outp
+        (xmlSecBufferGetData(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)) != NULL)) {
+ 
+         fprintf(output, "== PreDigest data - start buffer:\n");
+-        fwrite(xmlSecBufferGetData(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
+-               xmlSecBufferGetSize(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
+-               1, output);
++        (void)fwrite(xmlSecBufferGetData(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
++                     xmlSecBufferGetSize(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
++                     1, output);
+         fprintf(output, "\n== PreDigest data - end buffer\n");
+     }
+ 
+@@ -1679,9 +1697,9 @@ xmlSecDSigReferenceCtxDebugDump(xmlSecDSigReferenceCtxPtr dsigRefCtx, FILE* outp
+        (xmlSecBufferGetData(dsigRefCtx->result) != NULL)) {
+ 
+         fprintf(output, "== Result - start buffer:\n");
+-        fwrite(xmlSecBufferGetData(dsigRefCtx->result),
+-               xmlSecBufferGetSize(dsigRefCtx->result), 1,
+-               output);
++        (void)fwrite(xmlSecBufferGetData(dsigRefCtx->result),
++                     xmlSecBufferGetSize(dsigRefCtx->result), 1,
++                     output);
+         fprintf(output, "\n== Result - end buffer\n");
+     }
+ }
+@@ -1742,9 +1760,9 @@ xmlSecDSigReferenceCtxDebugXmlDump(xmlSecDSigReferenceCtxPtr dsigRefCtx, FILE* o
+        (xmlSecBufferGetData(dsigRefCtx->result) != NULL)) {
+ 
+         fprintf(output, "<Result>");
+-        fwrite(xmlSecBufferGetData(dsigRefCtx->result),
+-               xmlSecBufferGetSize(dsigRefCtx->result), 1,
+-               output);
++        (void)fwrite(xmlSecBufferGetData(dsigRefCtx->result),
++                     xmlSecBufferGetSize(dsigRefCtx->result), 1,
++                     output);
+         fprintf(output, "</Result>\n");
+     }
+ 
+@@ -1752,9 +1770,9 @@ xmlSecDSigReferenceCtxDebugXmlDump(xmlSecDSigReferenceCtxPtr dsigRefCtx, FILE* o
+        (xmlSecBufferGetData(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)) != NULL)) {
+ 
+         fprintf(output, "<PreDigestData>");
+-        fwrite(xmlSecBufferGetData(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
+-               xmlSecBufferGetSize(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
+-               1, output);
++        (void)fwrite(xmlSecBufferGetData(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
++                     xmlSecBufferGetSize(xmlSecDSigReferenceCtxGetPreDigestBuffer(dsigRefCtx)),
++                     1, output);
+         fprintf(output, "</PreDigestData>\n");
+     }
+     if(dsigRefCtx->dsigCtx->operation == xmlSecTransformOperationSign) {
+diff --git a/src/xmlenc.c b/src/xmlenc.c
+index 44c9877..3d4e0d2 100644
+--- a/src/xmlenc.c
++++ b/src/xmlenc.c
+@@ -65,7 +65,7 @@ xmlSecEncCtxCreate(xmlSecKeysMngrPtr keysMngr) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecEncCtx)=%d",
+-                    sizeof(xmlSecEncCtx));
++                    (int)sizeof(xmlSecEncCtx));
+         return(NULL);
+     }
+ 
+@@ -1218,9 +1218,9 @@ xmlSecEncCtxDebugDump(xmlSecEncCtxPtr encCtx, FILE* output) {
+        (encCtx->resultBase64Encoded != 0)) {
+ 
+         fprintf(output, "== Result - start buffer:\n");
+-        fwrite(xmlSecBufferGetData(encCtx->result),
+-               xmlSecBufferGetSize(encCtx->result), 1,
+-               output);
++        (void)fwrite(xmlSecBufferGetData(encCtx->result),
++                     xmlSecBufferGetSize(encCtx->result), 1,
++                     output);
+         fprintf(output, "\n== Result - end buffer\n");
+     }
+ }
+@@ -1311,9 +1311,9 @@ xmlSecEncCtxDebugXmlDump(xmlSecEncCtxPtr encCtx, FILE* output) {
+        (encCtx->resultBase64Encoded != 0)) {
+ 
+         fprintf(output, "<Result>");
+-        fwrite(xmlSecBufferGetData(encCtx->result),
+-               xmlSecBufferGetSize(encCtx->result), 1,
+-               output);
++        (void)fwrite(xmlSecBufferGetData(encCtx->result),
++                     xmlSecBufferGetSize(encCtx->result), 1,
++                     output);
+         fprintf(output, "</Result>\n");
+     }
+ 
+diff --git a/src/xpath.c b/src/xpath.c
+index e67631e..2c96192 100644
+--- a/src/xpath.c
++++ b/src/xpath.c
+@@ -91,7 +91,7 @@ xmlSecXPathDataCreate(xmlSecXPathDataType type) {
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "sizeof(xmlSecXPathData)=%d",
+-                    sizeof(xmlSecXPathData));
++                    (int)sizeof(xmlSecXPathData));
+         return(NULL);
+     }
+     memset(data, 0, sizeof(xmlSecXPathData));
+@@ -285,17 +285,17 @@ xmlSecXPathDataExecute(xmlSecXPathDataPtr data, xmlDocPtr doc, xmlNodePtr hereNo
+     to reserve NULL for our own purposes so we simply create an empty
+     node set here */
+     if(xpathObj->nodesetval == NULL) {
+-	xpathObj->nodesetval = xmlXPathNodeSetCreate(NULL);
+-	if(xpathObj->nodesetval == NULL) {
+-		xmlXPathFreeObject(xpathObj);
+-		xmlSecError(XMLSEC_ERRORS_HERE,
+-			NULL,
++    	xpathObj->nodesetval = xmlXPathNodeSetCreate(NULL);
++    	if(xpathObj->nodesetval == NULL) {
++    		xmlXPathFreeObject(xpathObj);
++    		xmlSecError(XMLSEC_ERRORS_HERE,
++        				NULL,
+                         "xmlXPathNodeSetCreate",
+                         XMLSEC_ERRORS_R_XML_FAILED,
+                         "expr=%s",
+                         xmlSecErrorsSafeString(data->expr));
+-            	return(NULL);
+-	}
++    		return(NULL);
++    	}
+     }
+ 
+     nodes = xmlSecNodeSetCreate(doc, xpathObj->nodesetval, data->nodeSetType);
+@@ -613,7 +613,7 @@ xmlSecTransformXPathNodeRead(xmlSecTransformPtr transform, xmlNodePtr node, xmlS
+                     NULL,
+                     XMLSEC_ERRORS_R_MALLOC_FAILED,
+                     "size=%d",
+-                    xmlStrlen(data->expr) + strlen(xpathPattern) + 1);
++                    (int)(xmlStrlen(data->expr) + strlen(xpathPattern) + 1));
+         return(-1);
+     }
+     sprintf((char*)tmp, xpathPattern, (char*)data->expr);
+diff --git a/src/xslt.c b/src/xslt.c
+index 0353a25..0a010bd 100644
+--- a/src/xslt.c
++++ b/src/xslt.c
+@@ -584,7 +584,7 @@ xmlSecXsApplyStylesheet(xmlSecXsltCtxPtr ctx, xmlDocPtr doc) {
+                     XMLSEC_ERRORS_R_XSLT_FAILED,
+                     XMLSEC_ERRORS_NO_MESSAGE);
+         goto done;
+-    }	    
++    }
+ 
+     /* set security prefs  */
+     ret = xsltSetCtxtSecurityPrefs(g_xslt_default_security_prefs, xsltCtx);
