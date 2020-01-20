@@ -1,7 +1,7 @@
 Summary: Library providing support for "XML Signature" and "XML Encryption" standards
 Name: xmlsec1
 Version: 1.2.20
-Release: 5%{?dist}%{?extra_release}
+Release: 7%{?dist}%{?extra_release}
 License: MIT
 Group: System Environment/Libraries
 Source0: http://www.aleksey.com/xmlsec/download/xmlsec1-%{version}.tar.gz
@@ -23,6 +23,7 @@ BuildRequires: gettext-devel
 BuildRequires: libtool
 
 Patch3: xmlsec1-1.2.20-covscan-fixes.patch
+Patch10: CVE-2017-1000061.patch
 
 %description
 XML Security Library is a C library based on LibXML2  and OpenSSL.
@@ -126,6 +127,7 @@ Libraries, includes, etc. for developing XML Security applications with NSS.
 %prep
 %setup -q
 %patch3 -p1 -b .covscan
+%patch10 -p1 -b .CVE-2017-1000061
 
 %build
 autoreconf -if
@@ -219,6 +221,15 @@ rm -fr ${RPM_BUILD_ROOT}
 %{_libdir}/pkgconfig/xmlsec1-nss.pc
 
 %changelog
+* Wed Aug  9 2017 Simo Sorce <simo@redhat.com> - 1.2.20-7
+- CVE-2017-1000061
+- Related: #1472092
+- Fix mis-applied patch hunk
+
+* Tue Jul 18 2017 Simo Sorce <simo@redhat.com> - 1.2.20-6
+- CVE-2017-1000061
+- Resolves: #1472092
+
 * Fri Sep  5 2014 Simo Sorce <simo@redhat.com> - 1.2.20-5
 - Add package to RHEL7
 - Resolves: #1118038
